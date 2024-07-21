@@ -1,0 +1,102 @@
+
+<section class="m-24">
+    <button
+                pButton
+                pRipple
+                label="Agregar Producto"
+                class="p-button-success mb-5"
+                (click)="showDialog()"
+                >
+            </button>
+    <p-table [value]="productos" [tableStyle]="{'min-width': '60rem'}">
+        <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+            <tr>
+                <td>{{product.nombre}}</td>
+                <td><img [src]="envAzure + product.imagenUrl" [alt]="product.name" width="80" class="shadow-4" /></td>
+
+                <!-- Acciones -->
+                <td><p-button icon="pi pi-pencil" [rounded]="true" class="mr-4" (click)="cargarProducto(product)"/>
+
+                  <p-button icon="pi pi-trash" [rounded]="true" severity="danger" (click)="eliminarProducto(product.id)"/></td>
+
+            </tr>
+        </ng-template>
+    </p-table>
+</section>
+
+
+
+<!-- Modal Agregar -->
+
+<p-dialog header="Agregar Producto" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" (onHide)="resetFormProducto()">
+  <form [formGroup]="form" (ngSubmit)="agregarProducto()">
+
+  <div class="flex align-items-center gap-3 mb-3 flex-col">
+      <label for="username" class="font-semibold w-6rem">Nombre</label>
+      <input pInputText  type="text"  formControlName="nombre" placeholder="Ingrese nombre del producto" class="w-full" maxlength="20">
+  </div>
+  <div class="flex align-items-center gap-3 mb-5 flex-col">
+      <label for="email" class="font-semibold w-6rem">Imagen</label>
+      <ngx-dropzone (change)="onSelect($event)" accept="image/jpeg,image/jpg,image/png" [disableClick]="disableZone" >
+        <ngx-dropzone-label>Sube una imagen</ngx-dropzone-label>
+        <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+          <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+        </ngx-dropzone-preview>
+      </ngx-dropzone>
+
+      <div style="padding: 1vh;">
+        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f">
+        </ngx-dropzone-image-preview>
+      </div>
+  </div>
+  <div class="flex  gap-2 justify-end">
+      <p-button label="Cancelar" severity="secondary" (onClick)="visible = false" />
+      <p-button type="submit" label="Agregar"  />
+  </div>
+</form>
+</p-dialog>
+
+
+<!-- Modal Editar -->
+<p-dialog header="Editar Producto" [modal]="true" [(visible)]="visibleEditar" [style]="{ width: '25rem' }" (onHide)="resetFormProducto()">
+
+  <form [formGroup]="form" (ngSubmit)="editarProducto()">
+  <div class="flex align-items-center gap-3 mb-3 flex-col">
+      <label for="username" class="font-semibold w-6rem">Nombre</label>
+      <input pInputText  type="text" formControlName="nombre"  placeholder="Ingrese nombre del platillo" class="w-full"  maxlength="20">
+  </div>
+  <div class="flex align-items-center gap-3 mb-5 flex-col">
+      <label for="email" class="font-semibold w-6rem">Imagen</label>
+      <ngx-dropzone (change)="onSelect($event)" accept="image/jpeg,image/jpg,image/png" [disableClick]="disableZone" >
+        <ngx-dropzone-label>Sube una imagen</ngx-dropzone-label>
+        <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+          <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+        </ngx-dropzone-preview>
+      </ngx-dropzone>
+
+      <div style="padding: 1vh;">
+        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f">
+        </ngx-dropzone-image-preview>
+      </div>
+  </div>
+  <div class="flex  gap-2 justify-end">
+      <p-button label="Cancelar" severity="secondary" (onClick)="visibleEditar = false" />
+      <p-button type="submit" label="Guardar"  />
+  </div>
+</form>
+</p-dialog>
+
+
